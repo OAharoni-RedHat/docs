@@ -1,7 +1,7 @@
 ---
 title: Cluster Sizing
 weight: 60
-aliases: /retail/travelops-sizing/
+aliases: /travelops/travelops-sizing/
 ---
 
 :toc:
