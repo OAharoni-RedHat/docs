@@ -13,10 +13,12 @@
 :sandbox: sandbox
 :maintained: maintained
 :tested: tested
+:archived: archived
 :validated: validated
 :sandbox-tier-first: Validated Patterns Sandbox tier
 :tested-tier-first: Validated Patterns Tested tier
 :maintained-tier-first: Validated Patterns Maintained tier
+:archived-tier-first: Validated Patterns Archived tier
 //:solution-version: Update later when we start using versioned releases
 //Patterns
 :aeg-pattern: Ansible Edge GitOps pattern
@@ -115,6 +117,9 @@
 :kebab: image:kebab.png[title="Options menu"]
 :rh-openstack-first: Red{nbsp}Hat OpenStack Platform (RHOSP)
 :openstack-short: RHOSP
+:rh-rhoso: Red{nbsp}Hat OpenStack Services on OpenShift
+:rh-rhoso-short: RHOSO
+:rhoso-gitops-pattern: RHOSO GitOps pattern
 //Assisted Installer
 :ai-full: Assisted Installer
 :ai-version: 2.3
@@ -193,3 +198,13 @@
 :cgu-operator-first: Topology Aware Lifecycle Manager (TALM)
 :cgu-operator-full: Topology Aware Lifecycle Manager
 :cgu-operator: TALM
+//Workshop
+:cli: oc
+:branch: main
+:vp-gh-repo: https://github.com/validatedpatterns
+:rhacm: Red{nbsp}Hat Advanced Cluster Management for Kubernetes
+:rhacs: Red{nbsp}Hat Advanced Cluster Security for Kubernetes
+:rhocp: Red{nbsp}Hat OpenShift Container Platform
+:rhodf: Red{nbsp}Hat OpenShift Data Foundations
+:eso: External Secrets Operator
+:vault: HashiCorp Vault

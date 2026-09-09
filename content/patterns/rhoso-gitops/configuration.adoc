@@ -1,0 +1,12 @@
+---
+title: Configuration
+weight: 30
+aliases: /rhoso-gitops/configuration/
+---
+
+:toc:
+:_content-type: ASSEMBLY
+include::modules/comm-attributes.adoc[]
+:imagesdir: /images
+
+include::modules/rhoso-gitops/rhoso-gitops-configuration.adoc[leveloffset=+1]

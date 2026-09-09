@@ -1,13 +1,13 @@
 ---
 title: Secure supply chain
-weight: 30
+weight: 35
 aliases: /layered-zero-trust/lzt-secure-supply-chain/
 ---
 
 :toc:
-:imagesdir: /images
 :_mod-docs-content-type: ASSEMBLY
 include::modules/comm-attributes.adoc[]
+:imagesdir: /images
 
 [id="lzt-secure-supply-chain"]
 = Use case: Secure supply chain

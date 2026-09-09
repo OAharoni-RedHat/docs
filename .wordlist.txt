@@ -1,3 +1,4 @@
+
 aaaee
 aab
 aap
@@ -13,7 +14,6 @@ actualweight
 additionalimages
 addon
 addons
-addr
 addr
 adoc
 ae
@@ -91,6 +91,7 @@ bh
 bitnami
 bj
 bjp
+blackwell
 bls
 bluegreen
 bluegreenpause
@@ -107,7 +108,10 @@ byo
 cacert
 cakephp
 canarypausestep
+cas
+ccvdr
 cdd
+cdh
 cdn
 centos
 centric
@@ -125,6 +129,7 @@ chown
 chroot
 cicd
 cj
+cjeanner
 ckollujlir
 claudiol
 cli
@@ -155,11 +160,13 @@ cmzwn
 cncf
 cnv
 cockroachdb
+coco
 codepath
 coffeeshop
 colocated
 compliancetype
 conf
+confidentialcontainers
 config
 configmanagement
 configmap
@@ -171,6 +178,7 @@ containerimage
 controlplane
 controlplaneendpoint
 coreos
+cosign
 cp
 crd
 crds
@@ -187,11 +195,13 @@ cryptographic
 csi
 csr
 csv
+csvs
 ctdim
 ctrl
 cuda
 customerloyalty
 customermocker
+customise
 customizable
 customizations
 cves
@@ -202,6 +212,7 @@ dasv
 datacenter
 dataflow
 datagrid
+dataplane
 dataset
 datasets
 datasheet
@@ -291,6 +302,7 @@ env
 envi
 envs
 ep
+epyc
 erp
 eso
 eso's
@@ -307,6 +319,7 @@ externalurl
 extraconfig
 facto
 fadc
+faipqlsci
 fc
 fcb
 fcea
@@ -332,6 +345,7 @@ fs
 fssl
 fsv
 fsync
+fu
 fvsm
 fx
 gapped
@@ -341,6 +355,7 @@ gcp
 gcqna
 genai
 genaiexamples
+genoa
 genrsa
 gf
 gh
@@ -384,6 +399,7 @@ hc
 hcl
 hcp
 hdsr
+healthcheck
 helloworld
 helmoverrides
 helmrepourl
@@ -400,6 +416,7 @@ hostingcluster
 hostname
 howto
 hpc
+hpp
 htpasswd
 httpbin
 httpd
@@ -413,6 +430,7 @@ hybridcloudpatterns
 hyperconverged
 hyperscaler
 hypershift
+hyperthreading
 iaa
 iam
 ib
@@ -420,6 +438,7 @@ ibmcloud
 idempotence
 idms
 idp
+ietf
 iframe
 ignoredifferences
 iio
@@ -449,6 +468,7 @@ ini
 init
 initcontainer
 initcontainers
+initdata
 insecureunsealvaultinsideclusterschedule
 installplanapproval
 instantiatable
@@ -459,6 +479,7 @@ inteldeviceplugin
 intellection
 interna
 ioat
+iommu
 iot
 iotgateway
 iotsensor
@@ -496,6 +517,8 @@ jtf
 jumpstart
 jupyter
 jws
+jyerthqlkjdugwqbg
+jyerthqlkjdugwqbg7vcg
 kafdrop
 kafkasource
 kafkatopic
@@ -504,6 +527,9 @@ kam
 kamelet
 kasten
 kastendr
+kata
+katacontainers
+kbs
 keycloak
 keypair
 keypairs
@@ -534,6 +560,7 @@ kubevirt
 kust
 kustomization
 kustomize
+kyverno
 kzwzqibmynhrxxxxxxxxx
 langchain
 lastlog
@@ -563,6 +590,7 @@ lsv
 lvm
 lvms
 machineapi
+machineconfig
 machineconfigpool
 machineconfigs
 machineset
@@ -602,6 +630,7 @@ microcontrollers
 microservice
 microservices
 middleware
+milan
 militaries
 millicore
 mins
@@ -618,6 +647,7 @@ mq
 mqtt
 multicloud
 multicluster
+multiclusterhub
 multisource
 multisourceconfig
 musthave
@@ -655,6 +685,7 @@ nosql
 num
 nutanix
 nvme
+nvswitch
 nvv
 nzrxxxxxxxx
 oauth
@@ -691,6 +722,7 @@ openshift's
 openshiftsdn
 openshiftversion
 openssl
+openstack
 openvino
 openvinotoolkit
 operatorchannel
@@ -700,6 +732,7 @@ operatorgroups
 operatorhub
 operatorsource
 opr
+osc
 osspa
 osx
 ouput
@@ -721,12 +754,15 @@ patternrepo
 patternsh
 patternsoperator
 pbivukilnpoe
+pccs
 pci
+pcr
 pem
 performant
 persistentvolumeclaim
 persistentvolumeclaims
 persistentvolumes
+pgpu
 pgsql
 pgvector
 pii
@@ -750,6 +786,7 @@ predeploy
 prem
 preplay
 preprocess
+prereq
 prereqs
 prerequisitesrequirements
 privatekey
@@ -777,6 +814,7 @@ qat
 qatlib
 qe
 qfdya
+qgs
 ql
 qna
 qtgmclkdlnkwcdpvyxarm
@@ -787,6 +825,7 @@ querier
 quickassist
 quickstart
 rabbitmq
+raci
 rbac
 rbklxs
 rdma
@@ -824,6 +863,7 @@ rhoai
 rhocp
 rhodf
 rhods
+rhoso
 rhpam
 rhpds
 rhsm
@@ -847,6 +887,7 @@ runtimes
 rxpm
 saas
 saml
+sandboxed
 sas
 sbom
 scada
@@ -869,6 +910,7 @@ serviceaccountcreate
 serviceaccountname
 setcap
 setweight
+sevsnp
 sgb
 sgx
 sgxdriver
@@ -880,9 +922,11 @@ signin
 sigstore
 siteadmin
 skipdryrunonmissingresource
+skopeo
 sla
 slas
 sme
+sno
 sonarqube
 sourcenamespace
 spawner
@@ -929,6 +973,7 @@ svg
 synapseai
 synched
 syncpolicy
+syncwave
 sys
 syscall
 targetbucket
@@ -938,7 +983,9 @@ targetns
 targetport
 tbd
 tcp
+tdx
 techpreview
+tee
 tei
 tekron
 tekton
@@ -984,6 +1031,7 @@ tradeoff
 tradeoffs
 transactional
 travelops
+trustee
 trvlops
 tsa
 tst
@@ -1021,6 +1069,7 @@ vaultkeys
 vaultpolicy
 vaultprefixes
 vaultproject
+vcg
 vcpu
 vcpus
 vdjtkgams
@@ -1030,6 +1079,7 @@ vectorized
 veeam
 vfio
 vhjpkievife
+viewform
 virtualmachine
 virtualmachines
 vm
@@ -1056,6 +1106,7 @@ wip
 wjalrxutnfemi/k7mdeng/bpxrficyexamplekey
 wnklrcd
 wtjq
+wypu
 wyr
 xeon
 xeons

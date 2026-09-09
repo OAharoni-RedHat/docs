@@ -11,6 +11,10 @@ partners:
 - Microsoft
 industries:
 - General
+focus_areas:
+- AI
+- Data
+- DevSecOps
 aliases: /azure-rag-llm-gitops/
 #pattern_logo:
 links:
@@ -18,6 +22,7 @@ links:
   install: getting-started
   bugs: https://github.com/validatedpatterns/rag-llm-gitops/issues
   feedback: https://docs.google.com/forms/d/e/1FAIpQLScI76b6tD1WyPu2-d_9CCVDr3Fu5jYERthqLKJDUGwqBg7Vcg/viewform
+  demo: 6SxOiDc3P7uMg38jAOLw
 ---
 
 :toc:

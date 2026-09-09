@@ -1,0 +1,218 @@
+---
+menu:
+  learn:
+    parent: Validated patterns frameworks
+title: Global configuration reference
+weight: 55
+aliases: /learn/values-global-configuration/
+---
+
+:toc:
+:imagesdir: /images
+:_content-type: ASSEMBLY
+include::modules/comm-attributes.adoc[]
+
+[id="values-global-configuration"]
+= Global configuration reference
+
+Every validated pattern includes a `values-global.yaml` file at the repository root. This file defines configuration settings that apply across all clusters and environments in the pattern.
+
+[id="global-section"]
+== `global` section
+
+The `global` section contains settings that Helm distributes to all sub-charts in the pattern.
+
+[id="global-pattern"]
+=== `global.pattern`
+
+Specifies the name of the validated pattern. The framework uses this value internally to identify the pattern.
+
+[source,yaml]
+----
+global:
+  pattern: multicloud-gitops
+----
+
+Do not change this value unless you are creating a new pattern.
+
+[id="global-singleargocd"]
+=== `global.singleArgoCD`
+
+Controls whether the pattern uses a single Argo CD instance for all managed objects. By default, the framework deploys two Argo CD instances: a clusterwide instance for privileged resources such as namespaces and subscriptions, and a namespaced instance for pattern applications. Setting this flag to `true` consolidates everything into the single clusterwide instance.
+
+[source,yaml]
+----
+global:
+  singleArgoCD: true
+----
+
+[IMPORTANT]
+====
+Use this flag only for new installs. Setting `singleArgoCD` to `true` on an existing deployment that already has two Argo CD instances is unlikely to work.
+====
+
+[id="global-options"]
+=== `global.options`
+
+The `options` block sets default behaviors for operator management and ArgoCD synchronization across all clusters.
+
+[source,yaml]
+----
+global:
+  options:
+    useCSV: false
+    syncPolicy: Automatic
+    installPlanApproval: Automatic
+----
+
+.Options fields
+[cols="2,1,5",options="header"]
+|===
+| Field | Default | Description
+
+| `syncPolicy`
+| `Automatic`
+| Sets the default ArgoCD synchronization policy. `Automatic` syncs changes from Git to the cluster without manual intervention. `Manual` requires an administrator to trigger each sync.
+
+| `installPlanApproval`
+| `Automatic`
+| Controls how Operator Lifecycle Manager (OLM) handles operator upgrades. With `Automatic`, operators check for and apply updates periodically. `Manual` requires an administrator to approve each upgrade.
+
+| `useCSV`
+| `false`
+| Determines whether subscriptions use specific `ClusterServiceVersions` (CSV) for operator installation. When set to `false`, the subscription channel determines which version to install. Set to `true` when you need to pin operators to specific versions.
+|===
+
+[id="main-section"]
+== `main` section
+
+The `main` section defines settings for the primary cluster that manages the pattern.
+
+[id="main-clustergroupname"]
+=== `main.clusterGroupName`
+
+Identifies the main ClusterGroup, which acts as the hub or starting point for the pattern. A ClusterGroup represents a set of clusters that share nearly identical configurations and serve a common architectural purpose.
+The new variable `main.variant` is 100% equivalent and is preferred.
+
+[source,yaml]
+----
+main:
+  clusterGroupName: hub
+----
+
+The value must match a corresponding `values-<clusterGroupName>.yaml` file in the repository. For example, `clusterGroupName: hub` requires a `values-hub.yaml` file. Most patterns use `hub` for the primary cluster.
+
+[NOTE]
+====
+`main.clusterGroupName` is equivalent to `main.variant`. New patterns should prefer `main.variant` with the `variants/` directory layout described below. Existing patterns that use `main.clusterGroupName` with values files in the repository root continue to work.
+====
+
+For more information about ClusterGroups, see link:/learn/clustergroup-in-values-files/[ClusterGroup in values files].
+
+[id="main-variant"]
+=== `main.variant`
+
+Starting with patterns-operator 0.0.78, clustergroup chart v0.9.57, and acm-chart v0.2.10, patterns can use `main.variant` instead of `main.clusterGroupName` to select which deployment variant to install. The two fields are functionally equivalent, but `variant` uses a different directory layout that keeps the repository root cleaner.
+When both fields are set, `main.variant` takes precedence.
+
+[source,yaml]
+----
+main:
+  variant: hub
+----
+
+When `main.variant` is set, the framework looks for values files inside a `variants/<variant>/` directory instead of the repository root. For example, `variant: hub` maps to `variants/hub/values-hub.yaml`.
+
+A pattern using this layout organizes its values files as follows:
+
+----
+values-global.yaml          <1>
+variants/
+├── hub/                    <2>
+│   ├── values-hub.yaml
+│   └── values-group-one.yaml
+└── standalone/             <3>
+    └── values-standalone.yaml
+----
+<1> `values-global.yaml` stays at the repository root and defines global settings, including the default `variant`.
+<2> The `hub` variant directory contains all values files for the hub ClusterGroup.
+<3> Additional variant directories hold values files for other deployment scenarios, such as a standalone cluster.
+
+Running `./pattern.sh make install` deploys the variant specified in `main.variant`. To deploy a different variant, change the `variant` field in `values-global.yaml` before installing.
+
+Both `main.variant` and `main.clusterGroupName` are supported. If both are set, `main.variant` takes precedence.
+
+[id="main-multisourceconfig"]
+=== `main.multiSourceConfig`
+
+Controls whether ArgoCD uses multi-source applications, enabling Helm charts to be fetched from external repositories in addition to the local Git repository.
+
+[source,yaml]
+----
+main:
+  multiSourceConfig:
+    enabled: true
+----
+
+.multiSourceConfig fields
+[cols="2,1,5",options="header"]
+|===
+| Field | Default | Description
+
+| `enabled`
+| `true`
+| Enables multi-source ArgoCD applications. This is the recommended setting for most deployments.
+
+| `clusterGroupChartVersion`
+| (optional)
+| Constrains the version of the ClusterGroup Helm chart to fetch. Accepts semver ranges such as `0.9.*`.
+
+| `helmRepoUrl`
+| (optional)
+| Overrides the Helm chart repository URL. Use this for disconnected or air-gapped environments where charts are hosted on an internal registry.
+|===
+
+For more information about disconnected environments, see link:/learn/disconnected-installation/[Disconnected installation].
+
+[id="example-values-global"]
+== Example `values-global.yaml`
+
+The following example shows a `values-global.yaml` file using the newer `variant` layout:
+
+[source,yaml]
+----
+---
+global:
+  pattern: multicloud-gitops
+  singleArgoCD: true
+
+  options:
+    useCSV: false
+    syncPolicy: Automatic
+    installPlanApproval: Automatic
+
+main:
+  variant: hub
+
+  multiSourceConfig:
+    enabled: true
+    clusterGroupChartVersion: "0.9.*"
+----
+
+The equivalent configuration using the older flat layout uses `clusterGroupName` instead:
+
+[source,yaml]
+----
+main:
+  clusterGroupName: hub
+----
+
+For most patterns, the default values provide a working configuration. Customize specific fields only when your environment requires different behavior, such as pinning operator versions, using a single Argo CD instance, or deploying in a disconnected environment.
+
+[id="additional-resources"]
+== Additional resources
+
+* link:/values-files/[Exploring values files]
+* link:/learn/clustergroup-in-values-files/[ClusterGroup in values files]
+* link:/learn/disconnected-installation/[Disconnected installation]
+* link:/learn/vp_add_specific_ops_to_pattern/[Adding a specific operator version to a pattern]

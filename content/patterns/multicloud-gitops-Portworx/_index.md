@@ -1,15 +1,19 @@
 ---
 title: Multicloud GitOps with Portworx Enterprise
 date: 2023-05-18
-tier: sandbox
+tier: archived
 summary: This pattern helps you develop and deploy applications on an open hybrid cloud in a stable, simple, and secure way. It includes persistent storage for stateful applications.
 rh_products:
 - Red Hat OpenShift Container Platform
 - Red Hat Advanced Cluster Management
 partners:
-- Portworx Enterprise
+- Portworx by Everpure
 industries:
 - General
+focus_areas:
+- DevSecOps
+- Resilience
+- Data
 aliases: /multicloud-gitops-Portworx/
 variant_of: multicloud-gitops
 pattern_logo: multicloud-gitops-Portworx.png

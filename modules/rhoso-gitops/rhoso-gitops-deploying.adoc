@@ -1,0 +1,108 @@
+:_content-type: PROCEDURE
+:imagesdir: ../../images
+
+[id="deploying-rhoso-gitops-pattern"]
+= Deploying the {rhoso-gitops-pattern}
+
+Deploy the {rhoso-gitops-pattern} on a single {rh-ocp} cluster. Complete the
+prerequisites, prepare your fork of the pattern repository, install with
+`./pattern.sh`, and verify that Argo CD Applications are healthy.
+
+[id="rhoso-gitops-prerequisites"]
+== Prerequisites
+
+Before you deploy the pattern, verify that you have the following:
+
+* A {rh-ocp} cluster meeting the
+  link:https://docs.redhat.com/en/documentation/red_hat_openstack_services_on_openshift/latest/html/planning_your_deployment/assembly_infrastructure-and-system-requirements#ref_RHOCP-software-requirements_planning[{rh-rhoso-short} software requirements]
+  with enough compute and storage. For sizing guidance, see
+  link:../cluster-sizing/[Cluster sizing].
+* Cluster administrator privileges and a working `kubeconfig`.
+* link:https://podman.io/[Podman] 4.3 or later for `./pattern.sh`.
+* {gitops-title} available on the cluster (installed by the pattern framework or
+  pre-installed).
+* The required link:https://validatedpatterns.io/learn/quickstart/[tool dependencies].
+
+[id="rhoso-gitops-preparing-deployment"]
+== Preparing for deployment
+
+.Procedure
+
+. Fork the
+  link:https://github.com/validatedpatterns-sandbox/rhoso-gitops[rhoso-gitops]
+  repository on GitHub.
+
+. Clone your fork:
++
+[source,terminal,subs="+quotes"]
+----
+$ git clone git@github.com:__<your_organization>__/rhoso-gitops.git
+----
+
+. Change to the repository directory:
++
+[source,terminal]
+----
+$ cd rhoso-gitops
+----
+
+. Configure your overrides. See
+  link:../configuration/[{rhoso-gitops-pattern} configuration] for the values
+  file layers and override options.
+
+. Configure your secrets file before installing. See
+  link:../secret-management/[Secret management for the {rhoso-gitops-pattern}]
+  for instructions on both the {hashicorp-vault-short} + {eso-op} and direct
+  injection approaches.
+
+[id="rhoso-gitops-installing-pattern"]
+== Installing the pattern
+
+.Procedure
+
+. Validate prerequisites without applying changes:
++
+[source,terminal]
+----
+$ ./pattern.sh make validate-prereq
+----
+
+. Preview the rendered manifests:
++
+[source,terminal]
+----
+$ ./pattern.sh make show
+----
+
+. Install the pattern:
++
+[source,terminal]
+----
+$ ./pattern.sh make install
+----
+
+[id="rhoso-gitops-verifying-deployment"]
+== Verifying the deployment
+
+.Procedure
+
+. List Argo CD applications in `vp-gitops`:
++
+[source,terminal]
+----
+$ oc get applications -n vp-gitops
+----
+
+. After installation, run the pattern health check:
++
+[source,terminal]
+----
+$ ./pattern.sh make argo-healthcheck
+----
+
+. Validate the pattern schema:
++
+[source,terminal]
+----
+$ ./pattern.sh make validate-schema
+----

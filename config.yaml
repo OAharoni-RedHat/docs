@@ -35,6 +35,7 @@ taxonomies:
   industry: 'industries'
   rh_product: 'rh_products'
   partners: 'partners'
+  focus_area: 'focus_areas'
   blog_tag: 'blog_tags'
 
 mediaTypes:
@@ -47,10 +48,7 @@ outputFormats:
     mediatype: application/json
 
 menus:
-  main:
-    - name: Workshop
-      url: https://play.validatedpatterns.io
-      weight: 25
+  main: []
 sitemap:
   changeFreq: monthly
   priority: 0.5

@@ -12,12 +12,16 @@ partners:
   - IBM Fusion
 industries:
   - General
+focus_areas:
+  - AI
+  - Data
 aliases: /rag-llm-cpu/
 links:
   github: https://github.com/validatedpatterns-sandbox/rag-llm-cpu
   install: getting-started
   bugs: https://github.com/validatedpatterns-sandbox/rag-llm-cpu/issues
   feedback: https://docs.google.com/forms/d/e/1FAIpQLScI76b6tD1WyPu2-d_9CCVDr3Fu5jYERthqLKJDUGwqBg7Vcg/viewform
+  demo: WBiokIqAOZRlk7aXkvuU
 ---
 
 # **CPU-based RAG LLM chatbot**

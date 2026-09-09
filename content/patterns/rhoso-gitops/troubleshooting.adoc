@@ -1,0 +1,103 @@
+---
+title: Troubleshooting
+weight: 40
+aliases: /rhoso-gitops/troubleshooting/
+---
+
+:toc:
+:_content-type: ASSEMBLY
+include::modules/comm-attributes.adoc[]
+:imagesdir: /images
+
+[id="troubleshooting-rhoso-gitops"]
+= Troubleshooting the {rhoso-gitops-pattern}
+
+Validate the {rhoso-gitops-pattern} deployment, inspect Argo CD application and
+pod status, and review known issues. Use these procedures when child applications
+fail to sync, pods are unhealthy, or you need to confirm a successful deployment.
+
+[id="rhoso-gitops-validate-pattern"]
+== Validating the pattern
+
+Run the following pattern validation commands from the pattern repository root:
+
+. Validate prerequisites:
++
+[source,terminal]
+----
+$ ./pattern.sh make validate-prereq
+----
+
+. Validate the schema:
++
+[source,terminal]
+----
+$ ./pattern.sh make validate-schema
+----
+
+. Check Argo CD health:
++
+[source,terminal]
+----
+$ ./pattern.sh make argo-healthcheck
+----
+
+[id="rhoso-gitops-check-argocd"]
+== Checking Argo CD application status
+
+All Argo CD applications run in the `vp-gitops` namespace:
+
+. List applications in `vp-gitops`:
++
+[source,terminal]
+----
+$ oc get applications -n vp-gitops
+----
+
+. Inspect a child application that is out of sync or unhealthy:
++
+[source,terminal,subs="+quotes"]
+----
+$ oc describe application __<application_name>__ -n vp-gitops
+----
+
+Use the Argo CD UI in the `vp-gitops` namespace to review application status,
+resource health, and diff details for upstream overlays.
+
+[id="rhoso-gitops-check-pods"]
+== Checking pod status
+
+To verify that workloads deployed successfully, list pods that are not Running or
+Completed:
+
+[source,terminal]
+----
+$ oc get pods -A | grep -v Running | grep -v Completed
+----
+
+Review logs for a specific pod:
+
+[source,terminal,subs="+quotes"]
+----
+$ oc logs -n __<namespace>__ __<pod_name>__
+----
+
+[id="rhoso-gitops-known-issues"]
+== Known issues
+
+The following known issues can affect pattern deployment:
+
+* *`openstack-secrets` disabled*: The default pattern leaves
+  `openstack-secrets` disabled because no Git path exists.
+  Enable it only after you configure secret wiring. See
+  link:../secret-management/[Secret management for the {rhoso-gitops-pattern}].
+* *Upstream sync failures*: Confirm that `targetRevision` and paths in
+  `overrides/values-rhoso-gitops.yaml` match a tag or branch that exists in
+  link:https://github.com/openstack-k8s-operators/gitops[openstack-k8s-operators/gitops].
+* *Operator install delays*: Infrastructure Operators in `operator-dependencies`
+  subscribe from the cluster catalog; allow time for OLM to resolve
+  `ClusterServiceVersions` (CSVs). Other applications retry automatically
+  until their dependencies are satisfied.
+
+For community support, open an issue in the
+link:https://github.com/validatedpatterns-sandbox/rhoso-gitops/issues[pattern repository].

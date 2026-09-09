@@ -1,0 +1,221 @@
+:_content-type: REFERENCE
+:imagesdir: ../../images
+
+[id="rhoso-gitops-configuration"]
+= {rhoso-gitops-pattern} configuration
+
+The *rhoso-gitops* meta-chart renders Argo CD `Application` resources. It does
+not deploy {rh-rhoso-short} workloads directly; Kustomize overlays in the
+upstream GitOps repository remain the source of truth.
+
+[id="rhoso-gitops-values-layers"]
+== Values file layers
+
+The clustergroup application in `values-standalone.yaml` points Argo CD at
+`charts/all/rhoso-gitops` and layers pattern overrides from
+`overrides/values-rhoso-gitops.yaml` through `extraValueFiles`.
+
+.Values file layers
+[cols="1,2,3",options="header"]
+|===
+| Layer | File | Role
+
+| Pattern global
+| `values-global.yaml`
+| Pattern name, sync policy, singleArgoCD mode, custom ArgoCD health checks
+
+| Cluster group
+| `values-standalone.yaml`
+| Registers the `rhoso-gitops` application and namespaces
+
+| Chart defaults
+| `charts/all/rhoso-gitops/values.yaml`
+| Default `applications` map and chart-wide keys
+
+| Pattern overrides
+| `overrides/values-rhoso-gitops.yaml`
+| Pins upstream `repoURL`, `targetRevision`, and paths
+
+| Platform overrides
+| `overrides/values-AWS.yaml`
+| Optional platform-specific overrides (placeholder)
+|===
+
+To change upstream Git content (revision, paths, or enabled applications), edit
+`overrides/values-rhoso-gitops.yaml`. The pattern syncs automatically if
+`global.options.syncPolicy` is set to `Automatic` in `values-global.yaml`.
+
+[id="rhoso-gitops-upstream-applications"]
+== Upstream applications
+
+Child Argo CD Applications sync from
+link:https://github.com/openstack-k8s-operators/gitops[openstack-k8s-operators/gitops]
+at the revision pinned in `overrides/values-rhoso-gitops.yaml`.
+
+[IMPORTANT]
+====
+The `example/` overlays shipped in the upstream repository are *reference samples
+only*. They do not produce a working deployment on your infrastructure.
+To deploy {rh-rhoso-short}, point each application at your own Git overlay
+(see xref:rhoso-gitops-repoint-overlay[Pointing an application to your Git overlay]).
+====
+
+.Default upstream applications
+[cols="2,3,2,3",options="header"]
+|===
+| Application | Purpose | Upstream path | {rh-rhoso} docs
+
+| `operator-dependencies`
+| Infrastructure Operators (cert-manager, MetalLB, nmstate, observability)
+| link:https://github.com/openstack-k8s-operators/gitops/tree/main/example/dependencies[`example/dependencies`]
+| link:https://docs.redhat.com/en/documentation/red_hat_openstack_services_on_openshift/latest/html/planning_your_deployment/assembly_infrastructure-and-system-requirements#ref_RHOCP-software-requirements_planning[RHOCP software requirements]
+
+| `openstack-operator`
+| OpenStack Operator subscription
+| link:https://github.com/openstack-k8s-operators/gitops/tree/main/example/openstack-operator[`example/openstack-operator`]
+| link:https://docs.redhat.com/en/documentation/red_hat_openstack_services_on_openshift/latest/html/deploying_red_hat_openstack_services_on_openshift/assembly_installing-and-preparing-the-openstack-operator[Installing and preparing the OpenStack Operator]
+
+| `openstack-operator-cr`
+| Main `OpenStack` custom resource
+| link:https://github.com/openstack-k8s-operators/gitops/tree/main/example/openstack-operator-cr[`example/openstack-operator-cr`]
+| link:https://docs.redhat.com/en/documentation/red_hat_openstack_services_on_openshift/latest/html/deploying_red_hat_openstack_services_on_openshift/assembly_installing-and-preparing-the-openstack-operator[Installing and preparing the OpenStack Operator]
+
+| `openstack-secrets`
+| Secure-backend sync (disabled by default)
+| not configured
+| link:https://docs.redhat.com/en/documentation/red_hat_openstack_services_on_openshift/latest/html/deploying_red_hat_openstack_services_on_openshift/assembly_preparing-rhocp-for-rhoso#proc_providing-secure-access-to-the-RHOSO-services_preparing[Providing secure access to the RHOSO services]
+
+| `openstack-networks`
+| Network configuration
+| link:https://github.com/openstack-k8s-operators/gitops/tree/main/example/openstack-networks[`example/openstack-networks`]
+| link:https://docs.redhat.com/en/documentation/red_hat_openstack_services_on_openshift/latest/html/deploying_red_hat_openstack_services_on_openshift/assembly_preparing-rhoso-networks_preparing[Preparing RHOSO networks]
+
+| `openstack-controlplane`
+| `OpenStackControlPlane`
+| link:https://github.com/openstack-k8s-operators/gitops/tree/main/example/openstack-controlplane[`example/openstack-controlplane`]
+| link:https://docs.redhat.com/en/documentation/red_hat_openstack_services_on_openshift/latest/html/deploying_red_hat_openstack_services_on_openshift/assembly_creating-the-control-plane[Creating the control plane]
+
+| `openstack-dataplane`
+| Data plane
+| link:https://github.com/openstack-k8s-operators/gitops/tree/main/example/openstack-dataplane[`example/openstack-dataplane`]
+| link:https://docs.redhat.com/en/documentation/red_hat_openstack_services_on_openshift/latest/html/deploying_red_hat_openstack_services_on_openshift/assembly_creating-the-data-plane[Creating the data plane]
+|===
+
+By default, the pattern enables all applications except `openstack-secrets`.
+Applications use automated sync with a retry policy to handle transient failures
+during deployment convergence.
+
+[id="rhoso-gitops-pin-revision"]
+== Pinning a different upstream revision
+
+Child applications use *automated sync* by default: Argo CD reconciles them
+whenever the upstream Git repository changes. If `targetRevision` points to a
+branch name like `main` or `HEAD`, any push to that branch triggers an automatic
+deployment. This can cause unexpected changes in production.
+
+[IMPORTANT]
+====
+Always pin `targetRevision` to a *tag* or *commit hash* for stability.
+====
+
+In `overrides/values-rhoso-gitops.yaml`, set `targetRevision` for each
+application that you want to pin:
+
+[source,yaml]
+----
+applications:
+  openstack-operator:
+    targetRevision: "v0.2.0"                # tag — recommended
+  openstack-controlplane:
+    targetRevision: "abc123def456"           # commit hash — also safe
+----
+
+Apply the same key under every application you want on that revision, or only
+the entries that you want to change; unspecified keys keep chart defaults.
+
+[id="rhoso-gitops-disable-automated-sync"]
+== Disabling automated sync for an application
+
+To switch a specific application to manual sync, override its `syncPolicy`
+without the `automated` key:
+
+[source,yaml]
+----
+applications:
+  openstack-dataplane:
+    syncPolicy:
+      syncOptions:
+        - Prune=true
+----
+
+[id="rhoso-gitops-disable-stage"]
+== Disabling a deployment stage
+
+To disable a deployment stage, set `enabled` to `false` for that application:
+
+[source,yaml]
+----
+applications:
+  openstack-dataplane:
+    enabled: false
+----
+
+[id="rhoso-gitops-custom-retry"]
+== Setting a custom retry policy
+
+To override the default retry policy for an application:
+
+[source,yaml]
+----
+applications:
+  openstack-controlplane:
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+      retry:
+        limit: 20
+        backoff:
+          duration: "10s"
+          factor: 2
+          maxDuration: "5m"
+----
+
+For more information about retry options, see the Argo CD
+link:https://argo-cd.readthedocs.io/en/stable/user-guide/auto_sync/#automatic-sync-semantics[automatic sync documentation].
+
+[id="rhoso-gitops-repoint-overlay"]
+== Pointing an application to your Git overlay
+
+To point an application at your own Git overlay, set `repoURL`, `path`, and
+`targetRevision`:
+
+[source,yaml]
+----
+applications:
+  openstack-controlplane:
+    repoURL: "https://github.com/example/your-gitops.git"
+    path: "environments/prod/controlplane"
+    targetRevision: "main"
+----
+
+[id="rhoso-gitops-kustomize-components"]
+== Adding Kustomize components
+
+For example, add a secrets Operator component through `operator-dependencies`:
+
+[source,yaml]
+----
+applications:
+  operator-dependencies:
+    kustomize:
+      components:
+        - "https://github.com/openstack-k8s-operators/gitops/components/secrets/vault-secrets-operator?ref=v0.2.0"
+----
+
+For Vault Secrets Operator and {eso-op} component URLs, see the upstream
+link:https://github.com/openstack-k8s-operators/gitops/tree/main/components/secrets[components/secrets]
+README.
+
+For standalone Helm usage and advanced chart examples, see the upstream
+link:https://github.com/openstack-k8s-operators/gitops/tree/main/charts/rhoso-apps[rhoso-apps chart].
